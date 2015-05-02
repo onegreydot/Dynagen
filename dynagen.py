@@ -222,6 +222,7 @@ class Dynagen:
         self.generic_router_options = [
             'ram',
             'mac',
+            'system_id',
             'nvram',
             'disk0',
             'disk1',
@@ -270,6 +271,7 @@ class Dynagen:
                 'console',
                 'aux',
                 'mac',
+                'system_id',
                 'mmap',
                 'idlepc',
                 'exec_area',

@@ -2123,6 +2123,7 @@ class Router(Dynamips_device):
         self.__cnfg = None
         self.__confreg = '0x2102'
         self.__mac = None
+        self.__system_id = None
         self.__clock = None
         self.__aux = None
         self.__image = None
@@ -2146,6 +2147,7 @@ class Router(Dynamips_device):
             'cnfg': None,
             'confreg': '0x2102',
             'mac': None,
+            'system_id': None,
             'clock': None,
             'aux': None,
             'image': None,
@@ -2621,6 +2623,27 @@ class Router(Dynamips_device):
         return self.__aux
 
     aux = property(__getaux, __setaux, doc='The router aux port')
+
+    def __setsystem_id(self, system_id):
+        """ Set the base system_id of this router
+            system_id: (string) system_id
+        """
+
+        if type(system_id) not in [str, unicode]:
+            raise DynamipsError, 'invalid system_id address'
+        # look for anything up to 20 characters
+        if not re.search(r"""^([0-9A-Za-z]{1,20})$""", system_id, re.IGNORECASE):
+            raise DynamipsError, 'Invalid Processor board ID. Format is "XXXXXXXXXXXXX".'
+        self.__system_id = system_id
+        send(self.__d, '%s set_system_id %s %s' % (self.__model, self.__name, self.__system_id))
+
+    def __getsystem_id(self):
+        """ Returns base system id address of this router
+        """
+
+        return self.__system_id
+
+    system_id = property(__getsystem_id, __setsystem_id, doc='The base system_id of this router')
 
     def __setmac(self, mac):
         """ Set the base MAC address of this router
